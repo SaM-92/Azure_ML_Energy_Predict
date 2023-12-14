@@ -6,8 +6,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MaxAbsScaler
-from xgboost import XGBRegressor
 import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestRegressor
+from azureml.core import Workspace
+
 
 def main(args):
     # read data
@@ -23,10 +25,14 @@ def main(args):
     eval_model(model, X_test, y_test)
 
 # function that reads the data
-def get_data(path):
-    print("Reading data...")
-    df = pd.read_csv(path)
-    
+def get_data(dataset_name):
+    print(f"Reading data from dataset: {dataset_name}")
+    ws = Workspace(subscription_id= "dd022f57-1b53-4cf0-b379-44a3d7d57e27",
+    resource_group = "ies-pi-dev-uks-rg",
+    workspace_name = "ies-pi-dev-uks-ml")
+    dataset = Dataset.get_by_name(ws, name=dataset_name)
+    df = dataset.to_pandas_dataframe()
+    df = df.iloc[:768,:10]
     return df
 
 # function that splits the data
@@ -41,20 +47,19 @@ def split_data(df):
     return X_train, X_test, y_train, y_test
 
 # function that trains the model
-def train_model(X_train, y_train,learning_rate, n_estimators, max_depth):
+def train_model(X_train, y_train, n_estimators, max_depth):
     print("Training model...")
     
     # Create a pipeline
     pipeline = Pipeline([
         ('scaler', MaxAbsScaler()),  # Normalise data
-        ('model', XGBRegressor(learning_rate=learning_rate, n_estimators=n_estimators, max_depth=max_depth))  # XGBoost model
+        ('model', RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth))  # RandomForest model
     ])
     
     # Train the model
     model = pipeline.fit(X_train, y_train)
     
     return model
-
 # function that evaluates the model
 def eval_model(model, X_test, y_test):
     # calculate predictions
@@ -76,10 +81,8 @@ def parse_args():
 
     # add arguments
     parser.add_argument("--training_data", dest='training_data', type=str)
-    parser.add_argument("--reg_rate", dest='reg_rate', type=float, default=0.01)
-    parser.add_argument("--learning_rate", dest='learning_rate', type=float, default=0.1)
     parser.add_argument("--n_estimators", dest='n_estimators', type=int, default=100)
-    parser.add_argument("--max_depth", dest='max_depth', type=int, default=3)
+    parser.add_argument("--max_depth", dest='max_depth', type=int, default=None)
 
     # parse args
     args = parser.parse_args()

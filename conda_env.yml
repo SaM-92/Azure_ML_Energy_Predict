@@ -1,0 +1,10 @@
+name: my_env
+dependencies:
+  - python
+  - scikit-learn
+  - xgboost
+  - argparse
+  - numpy
+  - pandas
+  - matplotlib
+
