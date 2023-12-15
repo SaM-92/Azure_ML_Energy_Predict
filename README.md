@@ -2,7 +2,7 @@
 
 
 ## Overview
-This repository showcases a comprehensive Azure-based machine learning workflow. It demonstrates the process of uploading a dataset to Azure, setting up a machine learning environment with compute clusters, and running a Python script for model training and evaluation in the cloud. The project uses the Energy Efficiency Dataset to predict the thermal load of buildings, serving as a practical example of handling and analyzing data in a cloud environment.
+This repository showcases an Azure-based machine learning workflow. It demonstrates the process of uploading a dataset to Azure, setting up a machine learning environment with compute clusters, and running a Python script for model training and evaluation in the cloud. The project uses the Energy Efficiency Dataset to predict the thermal load of buildings, serving as a practical example of handling and analyzing data in a cloud environment.
 
 The repository is structured to guide users through setting up their Azure Machine Learning environment, managing data, executing training scripts on Azure compute clusters, and monitoring performance metrics through MLFlow. It is designed to be a template for similar machine learning tasks, emphasizing the ease and efficiency of cloud-based data science workflows.
 
