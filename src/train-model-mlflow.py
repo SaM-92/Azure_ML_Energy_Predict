@@ -7,8 +7,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MaxAbsScaler
 from xgboost import XGBRegressor
-import matplotlib.pyplot as plt
 
+from sklearn.metrics import mean_squared_error,r2_score
 def main(args):
     # read data
     df = get_data(args.training_data)
@@ -24,8 +24,9 @@ def main(args):
 
 # function that reads the data
 def get_data(path):
-    print("Reading data...")
-    df = pd.read_csv(path)
+    print("Reading data from dataset")
+    df = pd.read_csv(args)
+    df= df.iloc[:768,:10]
     
     return df
 
