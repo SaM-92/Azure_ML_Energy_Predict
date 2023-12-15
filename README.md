@@ -2,7 +2,18 @@
 
 
 ## Overview
-This repository contains a machine learning project focused on predicting the thermal load of buildings. It leverages the Energy Efficiency Dataset to develop a model that accurately estimates a building's energy performance, particularly its thermal load. The project follows a structured workflow, including data handling, model training, and evaluation, primarily executed in Azure and leveraging MLFlow for metric tracking.
+This repository showcases a comprehensive Azure-based machine learning workflow. It demonstrates the process of uploading a dataset to Azure, setting up a machine learning environment with compute clusters, and running a Python script for model training and evaluation in the cloud. The project uses the Energy Efficiency Dataset to predict the thermal load of buildings, serving as a practical example of handling and analyzing data in a cloud environment.
+
+The repository is structured to guide users through setting up their Azure Machine Learning environment, managing data, executing training scripts on Azure compute clusters, and monitoring performance metrics through MLFlow. It is designed to be a template for similar machine learning tasks, emphasizing the ease and efficiency of cloud-based data science workflows.
+
+Key aspects of this repository include:
+- Azure Machine Learning environment setup and configuration.
+- Data upload and management in Azure.
+- Execution of machine learning scripts on Azure compute clusters.
+- Performance tracking and evaluation using MLFlow.
+
+This project is ideal for those looking to understand how to leverage cloud platforms like Azure for machine learning tasks, from data handling to model deployment.
+
 
 ## Dataset
 We use the Energy Efficiency Dataset, originally curated by Angeliki Xifara and Athanasios Tsanas at the University of Oxford, UK. It consists of 768 samples and 8 features, simulating different building shapes to predict thermal load. The dataset is in CSV format and is incorporated into our workspace for machine learning purposes.
