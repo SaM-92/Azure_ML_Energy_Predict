@@ -9,7 +9,8 @@ from sklearn.preprocessing import MaxAbsScaler
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 from azureml.core import Workspace
-
+from azureml.core import Dataset
+from sklearn.metrics import mean_squared_error,r2_score
 
 def main(args):
     # read data
@@ -19,20 +20,21 @@ def main(args):
     X_train, X_test, y_train, y_test = split_data(df)
 
     # train model
-    model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+    model = train_model( X_train, y_train, args.n_estimators, args.max_depth)
 
     # evaluate model
     eval_model(model, X_test, y_test)
 
 # function that reads the data
-def get_data(dataset_name):
-    print(f"Reading data from dataset: {dataset_name}")
-    ws = Workspace(subscription_id= "dd022f57-1b53-4cf0-b379-44a3d7d57e27",
-    resource_group = "ies-pi-dev-uks-rg",
-    workspace_name = "ies-pi-dev-uks-ml")
-    dataset = Dataset.get_by_name(ws, name=dataset_name)
-    df = dataset.to_pandas_dataframe()
-    df = df.iloc[:768,:10]
+def get_data(args):
+    print("Reading data from dataset")
+    # ws = Workspace(subscription_id= "dd022f57-1b53-4cf0-b379-44a3d7d57e27",
+    # resource_group = "ies-pi-dev-uks-rg",
+    # workspace_name = "ies-pi-dev-uks-ml")
+    # dataset = Dataset.get_by_name(ws, name=dataset_name)
+    # df = dataset.to_pandas_dataframe()
+    df = pd.read_csv(args)
+    df= df.iloc[:768,:10]
     return df
 
 # function that splits the data
