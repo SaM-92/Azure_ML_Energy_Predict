@@ -6,10 +6,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MaxAbsScaler
-import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
-from azureml.core import Workspace
-from azureml.core import Dataset
 from sklearn.metrics import mean_squared_error,r2_score
 
 def main(args):
