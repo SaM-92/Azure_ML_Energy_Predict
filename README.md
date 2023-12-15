@@ -1,4 +1,4 @@
-# README for Energy Efficiency ML Project
+# Predicting Thermal Energy Consumption of Buildings Using Azure 
 
 
 ## Overview
