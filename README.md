@@ -1,4 +1,4 @@
-# Predicting Thermal Energy Consumption of Buildings Using Azure 
+# Cloud-Integrated ML Training: Local Data to Cluster Execution and Dashboard Monitoring
 
 
 ## Overview
