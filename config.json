@@ -1,5 +1,5 @@
 {
-    "subscription_id": "dd022f57-1b53-4cf0-b379-44a3d7d57e27",
-    "resource_group": "ies-pi-dev-uks-rg",
-    "workspace_name": "ies-pi-dev-uks-ml"
+    "subscription_id": "<YOUR subscription_id>",
+    "resource_group": "<YOUR resource_group>",
+    "workspace_name": "<YOUR workspace_name>"
 }

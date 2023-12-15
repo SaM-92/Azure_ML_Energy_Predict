@@ -28,11 +28,6 @@ def main(args):
 # function that reads the data
 def get_data(args):
     print("Reading data from dataset")
-    # ws = Workspace(subscription_id= "dd022f57-1b53-4cf0-b379-44a3d7d57e27",
-    # resource_group = "ies-pi-dev-uks-rg",
-    # workspace_name = "ies-pi-dev-uks-ml")
-    # dataset = Dataset.get_by_name(ws, name=dataset_name)
-    # df = dataset.to_pandas_dataframe()
     df = pd.read_csv(args)
     df= df.iloc[:768,:10]
     return df
