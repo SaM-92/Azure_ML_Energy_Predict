@@ -5,7 +5,7 @@
 This repository contains a machine learning project focused on predicting the thermal load of buildings. It leverages the Energy Efficiency Dataset to develop a model that accurately estimates a building's energy performance, particularly its thermal load. The project follows a structured workflow, including data handling, model training, and evaluation, primarily executed in Azure and leveraging MLFlow for metric tracking.
 
 ## Dataset
-We use the Energy Efficiency Dataset, originally curated by Angeliki Xifara and Athanasios Tsanas at the University of Oxford, UK. It consists of 768 samples and 8 features, simulating different building shapes to predict thermal load. The dataset is in Excel format and is incorporated into our workspace for machine learning purposes.
+We use the Energy Efficiency Dataset, originally curated by Angeliki Xifara and Athanasios Tsanas at the University of Oxford, UK. It consists of 768 samples and 8 features, simulating different building shapes to predict thermal load. The dataset is in CSV format and is incorporated into our workspace for machine learning purposes.
 
 ## Attribute Information:
 X1: Relative Compactness
@@ -20,33 +20,49 @@ y1: Heating Load
 y2: Cooling Load
 
 ## Workflow
-Data Reading: A Jupyter notebook reads data from a local machine.
-Data Upload and Registration: The dataset is uploaded and registered into Azure as AssetTypes.URI_FILE.
-Cluster Creation: The workflow includes steps to create ML clusters in Azure.
-Model Training Script: A Python script (train.py) is provided for model training. Key functions in the script include:
-get_data(): Reads the data.
-split_data(): Splits the data into training and testing sets.
-train_model(): Trains the model using a RandomForestRegressor.
-eval_model(): Evaluates the model using metrics like RMSE and R-squared.
-MLFlow Integration: We use MLFlow for logging metrics during model training and evaluation.
+1. **Data Reading**: A Jupyter notebook reads data from a local machine.
+2. **Data Upload and Registration**: The dataset is uploaded and registered into Azure as `URI_FILE`.
+3. **Compute Cluster Creation**: The workflow includes steps to create ML compute clusters in Azure.
+4. **Model Training Script**: A Python script (`train-model-script.py`) is provided for model training. Key functions in the script include:
+   - `get_data()`: Reads the data.
+   - `split_data()`: Splits the data into training and testing sets.
+   - `train_model()`: Trains the model using a RandomForestRegressor.
+   - `eval_model()`: Evaluates the model using metrics like RMSE and R-squared.
+5. **MLFlow Integration**: We use MLFlow for logging metrics during model training and evaluation.
+
 
 ##Execution
 To run the project:
 
-- Ensure Azure ML environment is set up with required clusters.
-- Execute the provided notebook to handle data upload and registration.
-- Run the train.py script for training and evaluating the model.
-- Monitor the performance metrics through MLFlow.
+1. **Azure ML Environment Setup**: Ensure your Azure Machine Learning environment is correctly configured with the necessary compute clusters. This includes providing your Azure subscription ID, resource group, and workspace name.
+2. **Data Handling**: Execute the provided Jupyter notebook to manage data upload and registration. This step involves uploading the dataset to your Azure workspace.
+3. **Model Training**: Use the command job in the Python notebook to execute the `train-model-script.py` script. This script will run on the Azure compute clusters, allowing for efficient model training and evaluation.
+4. **Performance Monitoring**: Track the performance metrics of your model through MLFlow, which can be accessed via your ML Studio Dashboard.
+
   
 ## Objective
-The primary aim is to predict the thermal load of buildings using machine learning techniques. This project, while focusing on thermal load prediction, provides a framework that can be adapted for broader energy efficiency studies.
+The main goal of this project is to demonstrate how to upload a dataset to Azure and execute a script on compute clusters. While the focus is on the practical application of these steps using a building dataset for thermal load prediction, the project serves as a template for a broader range of machine learning studies. This approach can be adapted to different datasets and machine learning scenarios, showcasing the versatility and power of Azure's ML tools and infrastructure.
 
 ## Dependencies
-Azure ML SDK
-MLFlow
-Scikit-Learn
-Pandas
-Numpy
+This project relies on several libraries and packages for its execution. Ensure that these dependencies are installed in your environment:
+
+- `IPython.display`: For displaying outputs in Jupyter notebooks.
+- `azure.ai.ml.entities`: For using Azure ML entities like AmlCompute.
+- `azure.ai.ml`: Core Azure Machine Learning library for Python.
+- `azure.identity`: For Azure identity management and authentication.
+- `azure.ai.ml.constants`: For accessing Azure ML constants like AssetTypes and InputOutputModes.
+- `mlflow`: For experiment tracking and logging metrics.
+- `argparse`: For parsing command-line arguments in Python scripts.
+- `pandas`: For data manipulation and analysis.
+- `numpy`: For numerical computations and array handling.
+- `sklearn.model_selection`: For splitting datasets into training and test sets.
+- `sklearn.pipeline`: For creating machine learning pipelines.
+- `sklearn.preprocessing`: For data preprocessing and scaling.
+- `sklearn.ensemble`: For ensemble machine learning models, specifically RandomForestRegressor.
+- `sklearn.metrics`: For calculating performance metrics like mean squared error and R-squared.
+
+These dependencies are crucial for the various stages of the project, from data processing and model training to evaluation and logging.
+
 
 # Note
 This project serves as a template for machine learning applications in energy efficiency and can be extended or modified for related tasks in the domain.
