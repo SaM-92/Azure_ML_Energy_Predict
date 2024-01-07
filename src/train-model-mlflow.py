@@ -7,84 +7,122 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MaxAbsScaler
 from xgboost import XGBRegressor
+from azureml.core import Workspace
+from sklearn.metrics import mean_squared_error, r2_score
+from azure.ai.ml import MLClient
 
-from sklearn.metrics import mean_squared_error,r2_score
+
 def main(args):
-    # read data
-    df = get_data(args.training_data)
+    # Initialize Azure ML workspace
+    ml_client = MLClient.from_config()
 
-    # split data
-    X_train, X_test, y_train, y_test = split_data(df)
+    # Set MLflow tracking URI to the workspace's MLflow tracking URI
+    azureml_tracking_uri = ml_client.workspaces.get(
+        ml_client.workspace_name
+    ).mlflow_tracking_uri
+    mlflow.set_tracking_uri(azureml_tracking_uri)
 
-    # train model
-    model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+    # Set MLflow experiment
+    experiment_name = "building-energy-training"
+    mlflow.set_experiment(experiment_name=experiment_name)
 
-    # evaluate model
-    eval_model(model, X_test, y_test)
+    with mlflow.start_run(run_name="building-energy-model-run"):
+        # read data
+        df = get_data(args.training_data)
+
+        # split data
+        X_train, X_test, y_train, y_test = split_data(df)
+
+        # train model
+        model = train_model(X_train, y_train, args.max_depth)
+
+        # evaluate model
+        eval_model(model, X_test, y_test)
+
 
 # function that reads the data
-def get_data(path):
+def get_data(args):
     print("Reading data from dataset")
     df = pd.read_csv(args)
-    df= df.iloc[:768,:10]
-    
+    df = df.iloc[:768, :10]
+
     return df
+
 
 # function that splits the data
 def split_data(df):
     print("Splitting data...")
-    X, y = df[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness',
-    'SerumInsulin','BMI','DiabetesPedigree','Age']].values, df['Diabetic'].values
+    X, y = (
+        df[
+            [
+                "Relative Compactness",
+                "Surface Area",
+                "Wall Area",
+                "Roof Area",
+                "Overall Height",
+                "Orientation",
+                "Glazing Area",
+                "Glazing Area Distribution",
+            ]
+        ].values,
+        df["Heating Load"].values,
+    )
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.30, random_state=0
+    )
 
     return X_train, X_test, y_train, y_test
 
+
 # function that trains the model
-def train_model(X_train, y_train):
+def train_model(X_train, y_train, max_depth):
     print("Training model...")
-    
+
     # Create a pipeline
-    pipeline = Pipeline([
-        ('scaler', MaxAbsScaler()),  # Normalize data
-        ('model', XGBRegressor())  # XGBoost model
-    ])
-    
+    pipeline = Pipeline(
+        [
+            ("scaler", MaxAbsScaler()),  # Normalize data
+            ("model", XGBRegressor(max_depth=max_depth)),  # XGBoost model
+        ]
+    )
+
     # Train the model
     model = pipeline.fit(X_train, y_train)
-    
+
     return model
+
 
 # function that evaluates the model
 def eval_model(model, X_test, y_test):
     # calculate predictions
     y_pred = model.predict(X_test)
-    
+
     # calculate RMSE
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-    print('Root Mean Squared Error:', rmse)
+    print("Root Mean Squared Error:", rmse)
     mlflow.log_metric("RMSE", rmse)
 
     # calculate R-squared
     r2 = r2_score(y_test, y_pred)
-    print('R-squared: ', r2)
+    print("R-squared: ", r2)
     mlflow.log_metric("R-squared", r2)
+
 
 def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
     # add arguments
-    parser.add_argument("--training_data", dest='training_data',
-                        type=str)
-    parser.add_argument("--reg_rate", dest='reg_rate',
-                        type=float, default=0.01)
+    parser.add_argument("--training_data", dest="training_data", type=str)
+    parser.add_argument("--max_depth", dest="max_depth", type=float, default=6)
 
     # parse args
     args = parser.parse_args()
 
     # return args
     return args
+
 
 # run script
 if __name__ == "__main__":

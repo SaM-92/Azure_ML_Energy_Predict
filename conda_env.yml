@@ -2,8 +2,12 @@ name: my_env
 dependencies:
   - python=3.9.13
   - pip:
-    - azureml-defaults~=1.34.0
-    - scikit-learn==1.2.2
-    - xgboost==1.7.3
-    - numpy==1.23.5
-    - pandas==1.5.3
+    - azureml-defaults
+    - azureml-core
+    - azure-ai-ml
+    - azureml-mlflow
+    - scikit-learn
+    - xgboost
+    - numpy
+    - pandas
+    - mlflow
